@@ -17,21 +17,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include,path
 
-from rest_framework import routers
+from rest_framework import routers, renderers
 
 import snippets
 from rest_tutorial.quickstart import views
 
 from snippets import urls
 
+from snippets import  snippet_views
+
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+
+router.register(r"snippets", snippet_views.SnippetViewSet, basename="snippet")
+router.register(r"s-users", snippet_views.UserViewSet, basename="snippet-user")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("",include(router.urls)),
     path("api_auth/", include("rest_framework.urls", namespace="rest_framework")),
-    path("snippet-home/", include(snippets.urls)),
-    path("api-auth/", include("rest_framework.urls")),
 ]
